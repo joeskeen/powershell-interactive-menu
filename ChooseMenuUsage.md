@@ -43,7 +43,7 @@ $options = @{
     HelpColor = [ConsoleColor]::Cyan
     ErrorColor = [ConsoleColor]::DarkRed
     HighlightColor = [ConsoleColor]::DarkGreen
-    OptionSeperator = "      "
+    OptionSeparator = "      "
 }
 $menu.SetOptions($options)
 
@@ -78,7 +78,7 @@ $options = @{
     HelpColor = [ConsoleColor]::Cyan
     ErrorColor = [ConsoleColor]::DarkRed
     HighlightColor = [ConsoleColor]::DarkGreen
-    OptionSeperator = "      "
+    OptionSeparator = "      "
 }
 
 # Define the question of the menu
@@ -120,4 +120,4 @@ $answer = Get-InteractiveMenuChooseUserSelection -Question $question -Answers $a
 * `HelpColor` - Color of the help items. Default: `[ConsoleColor]::Cyan`
 * `ErrorColor` - Color of the errors. Default: `[ConsoleColor]::DarkRed`
 * `HighlightColor` - Color of the current selected item. Default: `[ConsoleColor]::DarkGreen`
-* `OptionSeperator` - The separator between the answers. Default: "<kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd>" (6 spaces)
+* `OptionSeparator` - The separator between the answers. Default: "<kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd><kbd>space</kbd>" (6 spaces)

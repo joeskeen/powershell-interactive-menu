@@ -164,7 +164,7 @@ class InteractiveMultiMenu {
 
     hidden [bool] ProcessKey($keyPress) {
         switch ($keyPress.Key) {
-            $([ConsoleKey]::DownArrow) {
+            ({$PSItem -eq [ConsoleKey]::DownArrow -or $PSItem -eq [ConsoleKey]::RightArrow}) {
                 $this.CurrentIndex++
                 if ($this.CurrentIndex -ge $this.Items.Length) {
                     $this.CurrentIndex = $this.Items.Length -1;
@@ -176,7 +176,7 @@ class InteractiveMultiMenu {
                     $this.CurrentIndex = $this.Items.Length -1;
                 }
             }
-            $([ConsoleKey]::UpArrow) {
+            ({$PSItem -eq [ConsoleKey]::UpArrow -or $PSItem -eq [ConsoleKey]::LeftArrow}) {
                 $this.CurrentIndex--
                 if ($this.CurrentIndex -lt 0) {
                     $this.CurrentIndex = 0;
@@ -303,10 +303,10 @@ class InteractiveMultiMenu {
 
 class InteractiveMenuChooseMenuItem {
     [ValidateNotNullOrEmpty()][string]$Label
-    [ValidateNotNullOrEmpty()][string]$Value
+    [ValidateNotNullOrEmpty()][object]$Value
     [ValidateNotNullOrEmpty()][string]$Info
 
-    InteractiveMenuChooseMenuItem([string]$label, [string]$value, [string]$info) {
+    InteractiveMenuChooseMenuItem([string]$label, [object]$value, [string]$info) {
         $this.Label = $label
         $this.Value = $value
         $this.Info = $Info
@@ -322,7 +322,7 @@ class InteractiveMenuChooseMenu {
     [ValidateNotNullOrEmpty()][ConsoleColor]$HelpColor = [ConsoleColor]::Cyan
     [ValidateNotNullOrEmpty()][ConsoleColor]$ErrorColor = [ConsoleColor]::DarkRed
     [ValidateNotNullOrEmpty()][ConsoleColor]$HighlightColor = [ConsoleColor]::DarkGreen
-    [ValidateNotNullOrEmpty()][string]$OptionSeperator = "      "
+    [ValidateNotNullOrEmpty()][string]$OptionSeparator = "      "
 
     hidden [int]$CurrentIndex = 0
     hidden [InteractiveMenuChooseMenuItem]$SelectedOption = $null
@@ -334,7 +334,7 @@ class InteractiveMenuChooseMenu {
         $this.Options = $options
     }
 
-    [string] GetAnswer() {
+    [object] GetAnswer() {
         $shouldContinue = $true
         do {
             Clear-Host
@@ -380,9 +380,10 @@ class InteractiveMenuChooseMenu {
             $backgroundColor = $defaultBackgroundColor
             if ($i -eq $this.CurrentIndex) {
                 $backgroundColor = $this.HighlightColor
+                $foregroundColor = [ConsoleColor]::Black
             }
             Write-Host " $($_.Label) " -NoNewline -ForegroundColor $foregroundColor -BackgroundColor $backgroundColor
-            Write-Host $this.OptionSeperator -NoNewline
+            Write-Host $this.OptionSeparator -NoNewline
             $i++
         }
         Write-Host
@@ -397,7 +398,7 @@ class InteractiveMenuChooseMenu {
 
     hidden [bool] ProcessKey($keyPress) {
         switch ($keyPress.Key) {
-            $([ConsoleKey]::RightArrow) {
+            ({$PSItem -eq [ConsoleKey]::RightArrow -or $PSItem -eq [ConsoleKey]::DownArrow}) {
                 $this.CurrentIndex++
                 if ($this.CurrentIndex -ge $this.Options.Length) {
                     $this.CurrentIndex = $this.Options.Length -1;
@@ -409,7 +410,7 @@ class InteractiveMenuChooseMenu {
                     $this.CurrentIndex = $this.Options.Length -1;
                 }
             }
-            $([ConsoleKey]::LeftArrow) {
+            ({$PSItem -eq [ConsoleKey]::LeftArrow -or $PSItem -eq [ConsoleKey]::UpArrow}) {
                 $this.CurrentIndex--
                 if ($this.CurrentIndex -lt 0) {
                     $this.CurrentIndex = 0;
@@ -499,7 +500,7 @@ function Get-InteractiveMenuUserSelection {
 function Get-InteractiveChooseMenuOption() {
     param(
         [Parameter(Mandatory)][string]$Label,
-        [Parameter(Mandatory)][string]$Value,
+        [Parameter(Mandatory)][object]$Value,
         [Parameter(Mandatory)][string]$Info
     )
 
